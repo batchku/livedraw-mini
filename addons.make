@@ -1,0 +1,6 @@
+ofxCv
+ofxMidi
+ofxOpenCv
+ofxOsc
+ofxXmlSettings
+ofxRPiCameraVideoGrabber
