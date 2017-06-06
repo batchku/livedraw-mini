@@ -29,9 +29,13 @@ void vidLayer::setup(int thisID, int bufSize){
     thresh = SHADER_THRESH;
     invert = SHADER_INVERT;
     softness = SHADER_SOFT;
-    shaderActive = 1;
-    x = CAM_W * scale * myID +CAM_W * scale/2;
-    y = CAM_H * scale + CAM_H/2;
+    opacity = SHADER_OPACITY;
+    shaderActive = SHADER_ACTIVE;
+    //x = THUMB_W * scale * myID +THUMB_W * scale/2;
+    //y = THUMB_H * scale + THUMB_H/2;
+    x = WINDOW_W/2;
+    y = WINDOW_H/2;
+    
     //does this allocate the FBO?
     for (int k = 0;k<bufSize;k++){
         vidFrames2[k].allocate(CAM_W, CAM_H);
@@ -57,9 +61,6 @@ void vidLayer::setup(int thisID, int bufSize){
 }
 
 void vidLayer::draw(ofTexture thisTexture){
-    //ofLog(OF_LOG_NOTICE, "iiiiiiin draw, value of scale is" + ofToString(myID)+ " at "+ ofToString(scale));
-    //ofLog(OF_LOG_NOTICE, "iiiiiiin draw, value of thresh is" + ofToString(myID)+ " at "+ ofToString(thresh));
-    //ofLog(OF_LOG_NOTICE, "iiiiiiin draw, value of xPos is" + ofToString(myID)+ " at "+ ofToString(xPos));
 
     if (state==2 && recCount>0) {
         //ofLog(OF_LOG_NOTICE, "playing at " + ofToString(myID)+ " at "+ ofToString(playHead));
@@ -70,6 +71,7 @@ void vidLayer::draw(ofTexture thisTexture){
             shader.setUniform1f("thresh", thresh);
             shader.setUniform1f("softness", softness);
             shader.setUniform1f("invert", invert);
+            shader.setUniform1f("opacity", opacity);
             vidFrames2[playHead].draw(x, y , CAM_W * scale, CAM_H * scale);
      
             shader.end();
@@ -162,12 +164,6 @@ void vidLayer::setState(int thisState){
                 invert = camInvert;
                 
                 
-                //try static
-                /*
-                thresh = ofApp::camThresh;
-                softness = ofApp::camSoftness;
-                invert = ofApp::camInvert;
-                */
                 
                 //ofLog(OF_LOG_NOTICE, "RECORD: State for layer " + ofToString(myID) + " is " + ofToString(state));
                 //ofLog(OF_LOG_NOTICE, "Starting recording on layer " + ofToString(myID));
@@ -209,6 +205,18 @@ void vidLayer::setShaderParams(float thisThresh, float thisSoftness, float thisI
 
 void vidLayer::setScale(float thisScale){
     scale =thisScale;
+}
+
+void vidLayer::setOpacity(float thisOpacity){
+    opacity =thisOpacity;
+}
+
+void vidLayer::setThresh(float thisThresh){
+    thresh =thisThresh;
+}
+
+void vidLayer::setInvert(float thisInvert){
+    invert =thisInvert;
 }
 
 void vidLayer::setPos(int positionX, int positionY){

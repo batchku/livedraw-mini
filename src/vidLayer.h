@@ -49,6 +49,9 @@ public:
     void setXPos(int positionX);
     void setYPos(int positionY);
     void setScale(float scale);
+    void setOpacity(float opacity);
+    void setThresh(float thresh);
+    void setInvert(float invert);
     
     int setFrame(int thisFrame, ofPixels thisPixels);
 

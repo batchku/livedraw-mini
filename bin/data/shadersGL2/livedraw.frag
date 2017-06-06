@@ -1,11 +1,10 @@
-#version 120
-
 uniform sampler2DRect tex0;
 uniform sampler2DRect maskTex;
 
 uniform float thresh;
 uniform float softness;
 uniform float invert;
+uniform float opacity;
 
 varying vec2 texCoordVarying;
 
@@ -27,7 +26,7 @@ void main()
     float mask = texture2DRect(maskTex, texCoordVarying).a;
 
     // combine mask and threshold
-    vec4 calc=vec4(fValue,fValue,fValue,fValue*mask);
+    vec4 calc=vec4(fValue*opacity,fValue*opacity,fValue*opacity,fValue*mask*opacity);
 
     // Set
     gl_FragColor = calc;

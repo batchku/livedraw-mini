@@ -3,8 +3,11 @@
 #include "ofMain.h"
 #include "ofxMidi.h"
 #include "vidLayer.h"
+#include "ofxCv.h"
+#include "ofxCvPiCam.h"
 #include "Utils.h"
 #include "ofxXmlSettings.h"
+#include "ConsoleListener.h"
 
 //for Raspberry Pi
 
@@ -21,10 +24,13 @@
 extern float camThresh;
 extern float camSoftness;
 extern float camInvert;
+extern float camOpacity;
 
 extern int CAM_DEV_ID;
 extern int CAM_W;
 extern int CAM_H;
+extern int THUMB_W;
+extern int THUMB_H;
 extern int CAM_FPS;
 
 //recording layers
@@ -45,15 +51,27 @@ extern int MIDI_YPOS;
 extern int MIDI_SHADER_BYPASS;
 extern int MIDI_SHADER_THRESH;
 extern int MIDI_SHADER_SOFT;
-extern int MIDI_SHADER_INVERT;
+extern int MIDI_SHADER_INVERT_ON;
+extern int MIDI_SHADER_INVERT_OFF;
+extern int MIDI_SHADER_OPACITY;
+extern int MIDI_SHADER_CAM_OPACITY;
+extern int MIDI_SHADER_CAM_THRESH;
+extern int MIDI_SHADER_CAM_SOFT;
+extern int MIDI_SHADER_CAM_INVERT_ON;
+extern int MIDI_SHADER_CAM_INVERT_OFF;
+
+
 
 //default layer settings
 extern float LAYER_SCALE;
 extern float SHADER_THRESH;
 extern float SHADER_INVERT;
 extern float SHADER_SOFT;
+extern float SHADER_OPACITY;
 extern int SHADER_ACTIVE;
+//extern string SHADER_MASK;
 
+extern int USE_OFXCVPI;
 
 
 class ofApp : public ofBaseApp, public ofxMidiListener {
@@ -63,6 +81,8 @@ class ofApp : public ofBaseApp, public ofxMidiListener {
 		void setup();
 		void update();
         void draw();
+        void drawCam(int x, int y);
+        void drawMIDI();
         void exit();
 
 		void keyPressed(int key);
@@ -117,6 +137,8 @@ class ofApp : public ofBaseApp, public ofxMidiListener {
             
             OMXCameraSettings omxCameraSettings;
             ofxRPiCameraVideoGrabber videoGrabber;
+            ofxCvPiCam videoGrabber2;
+
     
         #elif defined(TARGET_OSX)
     

@@ -421,9 +421,54 @@ obj/linuxarmv6l/Release/src/main.o: \
  /home/pi/openFrameworks/addons/ofxMidi/src/ofxMidiOut.h \
  /home/pi/openFrameworks/addons/ofxMidi/src/desktop/ofxRtMidiOut.h \
  /home/pi/openFrameworks/apps/myApps/livedraw-mini/src/vidLayer.h \
+ /home/pi/openFrameworks/addons/ofxCv/src/ofxCv.h \
+ /home/pi/openFrameworks/addons/ofxCv/libs/ofxCv/include/ofxCv/Utilities.h \
+ /home/pi/openFrameworks/addons/ofxCv/libs/ofxCv/include/ofxCv/Wrappers.h \
+ /home/pi/openFrameworks/addons/ofxCv/libs/CLD/include/CLD/imatrix.h \
+ /home/pi/openFrameworks/addons/ofxCv/libs/CLD/include/CLD/ETF.h \
+ /home/pi/openFrameworks/addons/ofxCv/libs/CLD/include/CLD/imatrix.h \
+ /home/pi/openFrameworks/addons/ofxCv/libs/CLD/include/CLD/fdog.h \
+ /home/pi/openFrameworks/addons/ofxCv/libs/CLD/include/CLD/myvec.h \
+ /home/pi/openFrameworks/addons/ofxCv/libs/ofxCv/include/ofxCv/Helpers.h \
+ /home/pi/openFrameworks/addons/ofxCv/libs/ofxCv/include/ofxCv/Distance.h \
+ /home/pi/openFrameworks/addons/ofxCv/libs/ofxCv/include/ofxCv/Calibration.h \
+ /home/pi/openFrameworks/addons/ofxCv/libs/ofxCv/include/ofxCv/Tracker.h \
+ /home/pi/openFrameworks/addons/ofxCv/libs/ofxCv/include/ofxCv/ContourFinder.h \
+ /home/pi/openFrameworks/addons/ofxCv/libs/ofxCv/include/ofxCv/RunningBackground.h \
+ /home/pi/openFrameworks/addons/ofxCv/libs/ofxCv/include/ofxCv/Flow.h \
+ /home/pi/openFrameworks/addons/ofxCv/libs/ofxCv/include/ofxCv/ObjectFinder.h \
+ /home/pi/openFrameworks/addons/ofxCv/libs/ofxCv/include/ofxCv/Kalman.h \
+ /home/pi/openFrameworks/addons/ofxCvPiCam/src/ofxCvPiCam.h \
+ /opt/vc/include/interface/mmal/mmal.h \
+ /opt/vc/include/interface/mmal/mmal_common.h \
+ /opt/vc/include/interface/mmal/mmal_types.h \
+ /opt/vc/include/interface/mmal/mmal_port.h \
+ /opt/vc/include/interface/mmal/mmal_format.h \
+ /opt/vc/include/interface/mmal/mmal_encodings.h \
+ /opt/vc/include/interface/mmal/mmal_buffer.h \
+ /opt/vc/include/interface/mmal/mmal_parameters.h \
+ /opt/vc/include/interface/mmal/mmal_parameters_camera.h \
+ /opt/vc/include/interface/mmal/mmal_parameters_common.h \
+ /opt/vc/include/interface/mmal/mmal_parameters_video.h \
+ /opt/vc/include/interface/mmal/mmal_parameters_audio.h \
+ /opt/vc/include/interface/mmal/mmal_parameters_clock.h \
+ /opt/vc/include/interface/mmal/mmal_clock.h \
+ /opt/vc/include/interface/mmal/mmal_component.h \
+ /opt/vc/include/interface/mmal/mmal_metadata.h \
+ /opt/vc/include/interface/mmal/mmal_queue.h \
+ /opt/vc/include/interface/mmal/mmal_pool.h \
+ /opt/vc/include/interface/mmal/mmal_events.h \
+ /opt/vc/include/interface/mmal/mmal_logging.h \
+ /opt/vc/include/interface/mmal/mmal_buffer.h \
+ /opt/vc/include/interface/mmal/mmal_parameters_camera.h \
+ /opt/vc/include/interface/mmal/util/mmal_util.h \
+ /opt/vc/include/interface/mmal/util/mmal_util_params.h \
+ /opt/vc/include/interface/mmal/util/mmal_default_components.h \
+ /opt/vc/include/interface/mmal/util/mmal_connection.h \
  /home/pi/openFrameworks/apps/myApps/livedraw-mini/src/Utils.h \
  /home/pi/openFrameworks/addons/ofxXmlSettings/src/ofxXmlSettings.h \
  /home/pi/openFrameworks/addons/ofxXmlSettings/libs/tinyxml.h \
+ /home/pi/openFrameworks/apps/myApps/livedraw-mini/src/ConsoleListener.h \
  /home/pi/openFrameworks/addons/ofxRPiCameraVideoGrabber/src/ofxRPiCameraVideoGrabber.h \
  ../../../libs/openFrameworks/app/ofAppEGLWindow.h \
  /home/pi/openFrameworks/addons/ofxRPiCameraVideoGrabber/src/OMX_Maps.h \
@@ -1327,11 +1372,101 @@ obj/linuxarmv6l/Release/src/main.o: \
 
 /home/pi/openFrameworks/apps/myApps/livedraw-mini/src/vidLayer.h:
 
+/home/pi/openFrameworks/addons/ofxCv/src/ofxCv.h:
+
+/home/pi/openFrameworks/addons/ofxCv/libs/ofxCv/include/ofxCv/Utilities.h:
+
+/home/pi/openFrameworks/addons/ofxCv/libs/ofxCv/include/ofxCv/Wrappers.h:
+
+/home/pi/openFrameworks/addons/ofxCv/libs/CLD/include/CLD/imatrix.h:
+
+/home/pi/openFrameworks/addons/ofxCv/libs/CLD/include/CLD/ETF.h:
+
+/home/pi/openFrameworks/addons/ofxCv/libs/CLD/include/CLD/imatrix.h:
+
+/home/pi/openFrameworks/addons/ofxCv/libs/CLD/include/CLD/fdog.h:
+
+/home/pi/openFrameworks/addons/ofxCv/libs/CLD/include/CLD/myvec.h:
+
+/home/pi/openFrameworks/addons/ofxCv/libs/ofxCv/include/ofxCv/Helpers.h:
+
+/home/pi/openFrameworks/addons/ofxCv/libs/ofxCv/include/ofxCv/Distance.h:
+
+/home/pi/openFrameworks/addons/ofxCv/libs/ofxCv/include/ofxCv/Calibration.h:
+
+/home/pi/openFrameworks/addons/ofxCv/libs/ofxCv/include/ofxCv/Tracker.h:
+
+/home/pi/openFrameworks/addons/ofxCv/libs/ofxCv/include/ofxCv/ContourFinder.h:
+
+/home/pi/openFrameworks/addons/ofxCv/libs/ofxCv/include/ofxCv/RunningBackground.h:
+
+/home/pi/openFrameworks/addons/ofxCv/libs/ofxCv/include/ofxCv/Flow.h:
+
+/home/pi/openFrameworks/addons/ofxCv/libs/ofxCv/include/ofxCv/ObjectFinder.h:
+
+/home/pi/openFrameworks/addons/ofxCv/libs/ofxCv/include/ofxCv/Kalman.h:
+
+/home/pi/openFrameworks/addons/ofxCvPiCam/src/ofxCvPiCam.h:
+
+/opt/vc/include/interface/mmal/mmal.h:
+
+/opt/vc/include/interface/mmal/mmal_common.h:
+
+/opt/vc/include/interface/mmal/mmal_types.h:
+
+/opt/vc/include/interface/mmal/mmal_port.h:
+
+/opt/vc/include/interface/mmal/mmal_format.h:
+
+/opt/vc/include/interface/mmal/mmal_encodings.h:
+
+/opt/vc/include/interface/mmal/mmal_buffer.h:
+
+/opt/vc/include/interface/mmal/mmal_parameters.h:
+
+/opt/vc/include/interface/mmal/mmal_parameters_camera.h:
+
+/opt/vc/include/interface/mmal/mmal_parameters_common.h:
+
+/opt/vc/include/interface/mmal/mmal_parameters_video.h:
+
+/opt/vc/include/interface/mmal/mmal_parameters_audio.h:
+
+/opt/vc/include/interface/mmal/mmal_parameters_clock.h:
+
+/opt/vc/include/interface/mmal/mmal_clock.h:
+
+/opt/vc/include/interface/mmal/mmal_component.h:
+
+/opt/vc/include/interface/mmal/mmal_metadata.h:
+
+/opt/vc/include/interface/mmal/mmal_queue.h:
+
+/opt/vc/include/interface/mmal/mmal_pool.h:
+
+/opt/vc/include/interface/mmal/mmal_events.h:
+
+/opt/vc/include/interface/mmal/mmal_logging.h:
+
+/opt/vc/include/interface/mmal/mmal_buffer.h:
+
+/opt/vc/include/interface/mmal/mmal_parameters_camera.h:
+
+/opt/vc/include/interface/mmal/util/mmal_util.h:
+
+/opt/vc/include/interface/mmal/util/mmal_util_params.h:
+
+/opt/vc/include/interface/mmal/util/mmal_default_components.h:
+
+/opt/vc/include/interface/mmal/util/mmal_connection.h:
+
 /home/pi/openFrameworks/apps/myApps/livedraw-mini/src/Utils.h:
 
 /home/pi/openFrameworks/addons/ofxXmlSettings/src/ofxXmlSettings.h:
 
 /home/pi/openFrameworks/addons/ofxXmlSettings/libs/tinyxml.h:
+
+/home/pi/openFrameworks/apps/myApps/livedraw-mini/src/ConsoleListener.h:
 
 /home/pi/openFrameworks/addons/ofxRPiCameraVideoGrabber/src/ofxRPiCameraVideoGrabber.h:
 
