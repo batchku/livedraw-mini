@@ -33,6 +33,10 @@ extern int THUMB_W;
 extern int THUMB_H;
 extern int CAM_FPS;
 
+//debug mode
+
+extern int DEBUG_MODE;
+
 //recording layers
 extern int LAYER_COUNT;
 extern int FRAME_COUNT;
@@ -69,10 +73,24 @@ extern float SHADER_INVERT;
 extern float SHADER_SOFT;
 extern float SHADER_OPACITY;
 extern int SHADER_ACTIVE;
-//extern string SHADER_MASK;
+extern int MIDI_KNOB_MODE;
 
+//extern string SHADER_MASK;
 extern int USE_OFXCVPI;
 
+//camera settings
+extern int EV_COMPENSATION;
+extern int FLICKER_CANCELATION;
+
+extern int CAM_SHARPNESS;
+extern int CAM_CONTRAST;
+extern int CAM_BRIGHTNESS;
+extern int CAM_SATURATION;
+
+extern int SERVO_1_IN;
+extern int SERVO_2_IN;
+extern int SERVO_1_OUT;
+extern int SERVO_2_OUT;
 
 class ofApp : public ofBaseApp, public ofxMidiListener {
 
@@ -83,6 +101,7 @@ class ofApp : public ofBaseApp, public ofxMidiListener {
         void draw();
         void drawCam(int x, int y);
         void drawMIDI();
+		void flipKnob();
         void exit();
 
 		void keyPressed(int key);
@@ -96,21 +115,21 @@ class ofApp : public ofBaseApp, public ofxMidiListener {
 		void windowResized(int w, int h);
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
-    
+
         ofTexture nowTexture;
         ofPixels nowPixels;
-    
+
         int counter;
-    
-    
+		bool knobMode;
+		ofImage     img;
         // for MIDI
         void newMidiMessage(ofxMidiMessage& eventArgs);
-        
+
         stringstream text;
-        
+
         ofxMidiIn midiIn;
         ofxMidiMessage midiMessage;
-    
+    	ofxMidiOut midiOut;
 
         // for shader params
         ofShader camShader;
@@ -122,11 +141,11 @@ class ofApp : public ofBaseApp, public ofxMidiListener {
 
         // Video layers
         vector < vidLayer > vidLayers;
-    
+
         // Live Camera
-    
+
         #ifdef TARGET_LINUX_ARM
-    
+
             /*
             void onCharacterReceived(KeyListenerEventData& e)
             {
@@ -134,22 +153,22 @@ class ofApp : public ofBaseApp, public ofxMidiListener {
             };
             */
             //TerminalListener consoleListener;
-            
+
             OMXCameraSettings omxCameraSettings;
             ofxRPiCameraVideoGrabber videoGrabber;
             ofxCvPiCam videoGrabber2;
 
-    
+
         #elif defined(TARGET_OSX)
-    
-            ofVideoGrabber videoGrabber;
-    
+
+            ofxRPiCameraVideoGrabber videoGrabber;
+
         #endif
 
-    
+
         //XML settings related
         ofxXmlSettings XML;
 
-    
-    
+
+
     };

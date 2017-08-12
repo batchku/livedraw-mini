@@ -141,7 +141,14 @@ void vidLayer::update2(ofTexture theTexture){
         
     } else if (state == 2) {
         //advance playhead
-        playHead = (playHead + 1) % recCount;
+        if(playDirection == 1){
+			if (playHead < (recCount - 1)) playHead++;
+			else if (playHead == (recCount - 1)) playDirection = 0;
+		}
+		else if (playDirection == 0){
+			if (playHead > 0) playHead--;
+			else if (playHead == 0) playDirection = 1;
+		}
     }
 }
 

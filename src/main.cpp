@@ -9,13 +9,13 @@ int main( ){
     
     #ifdef TARGET_LINUX_ARM
         ofGLESWindowSettings settings;
-        settings.width = 1024;
-        settings.height = 768;
+        settings.width = 640;
+        settings.height = 480;
         settings.glesVersion = 2;
         ofCreateWindow(settings);
         //ofSetupOpenGL(1280,720, OF_WINDOW);
     #elif defined(TARGET_OSX)
-        ofSetupOpenGL(640,480,OF_WINDOW);
+        ofSetupOpenGL(1024,768,OF_WINDOW);
         ofGLWindowSettings settings;
         settings.setGLVersion(3,2);
     
