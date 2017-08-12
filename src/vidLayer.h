@@ -17,10 +17,10 @@ public:
     //frames of video
     //array of textures
     //vector <ofTexture> vidFrames;
-    
+
     //array of FBOs
     vector <ofFbo> vidFrames2;
-    
+
     //properties
     int x;
     int y;
@@ -34,17 +34,18 @@ public:
     int recCount;           //record frame counter
     int recMax;             //maximum buffer size
     float opacity;
+    bool selected;
 
-    
+
     //methods
     void setup(int thisID, int bufSize);
     void draw(ofTexture thisTexture);
     void update(ofTexture thisTexture);
     void update2(ofTexture thisTexture);
-    
+
     void setState(int thisState);
     int getState();
-    
+
     void setSpeed(float speed);
     void setPos(int positionX, int positionY);
     void setXPos(int positionX);
@@ -53,21 +54,24 @@ public:
     void setOpacity(float opacity);
     void setThresh(float thresh);
     void setInvert(float invert);
-    
+
     int setFrame(int thisFrame, ofPixels thisPixels);
+
+    void setSelected(bool select);
+    bool getSelected();
 
     // Shader party
     ofShader shader;
     //this should be moved to ofApp.h because it's shared among all layers
     ofImage imageMask;
-    
+
     int shaderActive;
     float thresh;
     float softness;
     float invert;
     void setShaderParams(float thresh, float softness, float invert);
-    
-    
+
+
 };
 
 #endif /* vidLayer_hpp */

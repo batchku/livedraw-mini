@@ -14,10 +14,10 @@
 void vidLayer::setup(int thisID, int bufSize){
     //array of textures
     //vidFrames.resize(bufSize);
-    
+
     //array of FBOs
     vidFrames2.resize(bufSize);
-    
+
     myID = thisID;
     state = 0;                //stop all playheads
     playHead = 0;             //set all playheads to 0
@@ -35,14 +35,14 @@ void vidLayer::setup(int thisID, int bufSize){
     //y = THUMB_H * scale + THUMB_H/2;
     x = WINDOW_W/2;
     y = WINDOW_H/2;
-    
+
     //does this allocate the FBO?
     for (int k = 0;k<bufSize;k++){
         vidFrames2[k].allocate(CAM_W, CAM_H);
         vidFrames2[k].setAnchorPercent(0.5, 0.5);
     }
 
-    
+
     // setup Shader
     #ifdef TARGET_OPENGLES
         shader.load("shadersES2/livedraw");
@@ -53,10 +53,10 @@ void vidLayer::setup(int thisID, int bufSize){
             shader.load("shadersGL2/livedraw");
         }
     #endif
-    
+
     imageMask.load("img_mask_1080c.png");
     imageMask.resize(CAM_W,CAM_H);
-    
+
 
 }
 
@@ -64,7 +64,7 @@ void vidLayer::draw(ofTexture thisTexture){
 
     if (state==2 && recCount>0) {
         //ofLog(OF_LOG_NOTICE, "playing at " + ofToString(myID)+ " at "+ ofToString(playHead));
-        
+
         if (shaderActive == 1) {
             shader.begin();
             shader.setUniformTexture("maskTex", imageMask.getTexture(), 1);
@@ -73,15 +73,15 @@ void vidLayer::draw(ofTexture thisTexture){
             shader.setUniform1f("invert", invert);
             shader.setUniform1f("opacity", opacity);
             vidFrames2[playHead].draw(x, y , CAM_W * scale, CAM_H * scale);
-     
+
             shader.end();
         } else {
             vidFrames2[playHead].draw(x, y , CAM_W * scale, CAM_H * scale);
         }
 
-        
+
          } else if (state == 1) {
-        
+
         //while recording, draw live feed
              ofTexture livefeed;
              livefeed = thisTexture;
@@ -92,18 +92,18 @@ void vidLayer::draw(ofTexture thisTexture){
              shader.setUniform1f("thresh", thresh);
              shader.setUniform1f("softness", softness);
              shader.setUniform1f("invert", invert);
-             
+
              livefeed.draw(x, y, CAM_W * scale, CAM_H * scale);
              shader.end();
          } else {
 
              livefeed.draw(x, y , CAM_W * scale, CAM_H * scale);
          }
-     
-             
-             
+
+
+
     }
-    
+
 
 }
 
@@ -117,7 +117,7 @@ void vidLayer::update(ofTexture thisTexture){
 
         //advance record head
         recHead = (recHead + 1 ) % recMax;
-        
+
     } else if (state == 2) {
         //advance playhead
         playHead = (playHead + 1) % recCount;
@@ -128,17 +128,17 @@ void vidLayer::update(ofTexture thisTexture){
 void vidLayer::update2(ofTexture theTexture){
     if (state == 1) {
         //ofLog(OF_LOG_NOTICE, "recording update2 " + ofToString(myID)+ " at "+ ofToString(recHead));
-        
-        
+
+
         //draw texture onto FBO
         vidFrames2[recHead].begin();
         theTexture.draw(0,0);
         vidFrames2[recHead].end();
-        
-        
+
+
         //advance record head
         recHead = (recHead + 1 ) % recMax;
-        
+
     } else if (state == 2) {
         //advance playhead
         if(playDirection == 1){
@@ -154,24 +154,24 @@ void vidLayer::update2(ofTexture theTexture){
 
 void vidLayer::setState(int thisState){
     //if we're not already recording, start recording
-    
+
     switch (thisState) {
         //stop
         case 0:
         //record
         case 1:
             if (state != thisState) {
-                
+
                 //match shader params to camera input's shader
-                
+
                 //try extern
-                
+
                 thresh = camThresh;
                 softness = camSoftness;
                 invert = camInvert;
-                
-                
-                
+
+
+
                 //ofLog(OF_LOG_NOTICE, "RECORD: State for layer " + ofToString(myID) + " is " + ofToString(state));
                 //ofLog(OF_LOG_NOTICE, "Starting recording on layer " + ofToString(myID));
                 state=1;            //set state to 1
@@ -187,7 +187,7 @@ void vidLayer::setState(int thisState){
                 playHead = 0;           //set playhead to 0
             }
     }
-    
+
 }
 
 /*
@@ -200,8 +200,17 @@ int vidLayer::getState() {
     return(state);
 }
 
+bool vidLayer::getSelected(){
+    return(selected);
+}
+
+//Tell if layer is selected or not
+void vidLayer::setSelected(bool thisSelect){
+    selected = thisSelect;
+}
+
 void vidLayer::setSpeed(float speed){
-    
+
 }
 
 void vidLayer::setShaderParams(float thisThresh, float thisSoftness, float thisInvert){

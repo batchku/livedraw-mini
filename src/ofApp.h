@@ -123,6 +123,8 @@ class ofApp : public ofBaseApp, public ofxMidiListener {
 		bool knobMode;
 		ofImage     img;
     float thresh;
+    float pThresh;
+    
         // for MIDI
         void newMidiMessage(ofxMidiMessage& eventArgs);
 

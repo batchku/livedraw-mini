@@ -544,13 +544,14 @@ void ofApp::newMidiMessage(ofxMidiMessage& msg) {
         }
     }
 
-    //invert messages
+    //SELECT invert messages
     if (midiMessage.pitch >= MIDI_SHADER_INVERT_ON && midiMessage.pitch <= ((2 * LAYER_COUNT) + (MIDI_SHADER_INVERT_ON - 2)) && (midiMessage.pitch - MIDI_REC) % 2 == 1 ) {
         int layNum = (midiMessage.pitch - MIDI_SHADER_INVERT_ON) / 2;
         if (midiMessage.velocity == 127) {
-            vidLayers[layNum].setInvert(!vidLayers[layNum].invert); // Should toggle
+            //vidLayers[layNum].setInvert(!vidLayers[layNum].invert); // Should toggle
+            vidLayers[layNum].setSelected(!vidLayers[layNum].getSelected());
             ofLog(OF_LOG_NOTICE, ofToString(layNum) + " Invert toggle");
-            if(vidLayers[layNum].invert == 1) midiOut.sendNoteOn(MIDI_PORT, midiMessage.pitch, 127);
+            if(vidLayers[layNum].getSelected() == true) midiOut.sendNoteOn(MIDI_PORT, midiMessage.pitch, 127);
             else midiOut.sendNoteOff(MIDI_PORT, midiMessage.pitch);
         }
     }
@@ -632,7 +633,18 @@ void ofApp::newMidiMessage(ofxMidiMessage& msg) {
     if (midiMessage.control ==MIDI_SHADER_CAM_THRESH ) {
 
         if(knobMode == 1) camThresh = Utils::scale(midiMessage.value,0,127,0., 1.);
-		else  camSoftness = Utils::scale(midiMessage.value,0,127,0., 1.);
+		    else  camSoftness = Utils::scale(midiMessage.value,0,127,0., 1.);
+
+      if (midiMessage.value != pThresh){
+          thresh = midiMessage.value;
+          ofLog(OF_LOG_NOTICE, ofToString(thresh) + "  New Thresh Val");
+          float scaleVal = Utils::scale(thresh,0,127,0,1);
+          for(int i = 0; i < LAYER_COUNT; i++ ){
+            if(vidLayers[i].getSelected()) vidLayers[i].setThresh(scaleVal);
+          }
+          pThresh = thresh;
+      }
+
     }
 
 		//     if (midiMessage.control == CAM_BRIGHTNESS ) {
