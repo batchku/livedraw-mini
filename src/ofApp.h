@@ -122,6 +122,7 @@ class ofApp : public ofBaseApp, public ofxMidiListener {
         int counter;
 		bool knobMode;
 		ofImage     img;
+    float thresh;
         // for MIDI
         void newMidiMessage(ofxMidiMessage& eventArgs);
 
