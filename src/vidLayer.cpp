@@ -62,7 +62,7 @@ void vidLayer::setup(int thisID, int bufSize){
 
 void vidLayer::draw(ofTexture thisTexture){
 
-    if (state==2 && recCount>0) {
+    if (state == 2 && recCount > 0) {
         //ofLog(OF_LOG_NOTICE, "playing at " + ofToString(myID)+ " at "+ ofToString(playHead));
 
         if (shaderActive == 1) {
@@ -85,7 +85,7 @@ void vidLayer::draw(ofTexture thisTexture){
         //while recording, draw live feed
              ofTexture livefeed;
              livefeed = thisTexture;
-             livefeed.setAnchorPercent(0.5, 0.5);
+             //livefeed.setAnchorPercent(0.5, 0.5);
          if (shaderActive == 1) {
              shader.begin();
              shader.setUniformTexture("maskTex", imageMask.getTexture(), 1);
@@ -96,8 +96,11 @@ void vidLayer::draw(ofTexture thisTexture){
              livefeed.draw(x, y, CAM_W * scale, CAM_H * scale);
              shader.end();
          } else {
-
-             livefeed.draw(x, y , CAM_W * scale, CAM_H * scale);
+            ofPushMatrix();
+            ofRotate(45);
+            livefeed.setAnchorPoint(((CAM_W * scale) - x) * 0.5, ((CAM_H * scale) - y) * 0.5 );
+            livefeed.draw(x, y , CAM_W * scale, CAM_H * scale);
+            ofPopMatrix();
          }
 
 
@@ -129,11 +132,15 @@ void vidLayer::update2(ofTexture theTexture){
     if (state == 1) {
         //ofLog(OF_LOG_NOTICE, "recording update2 " + ofToString(myID)+ " at "+ ofToString(recHead));
 
-
+        //Rotate?
+        //ofPushMatrix();
+        //theTexture.setAnchorPoint(x, y);
+        //ofRotate(45);
         //draw texture onto FBO
         vidFrames2[recHead].begin();
         theTexture.draw(0,0);
         vidFrames2[recHead].end();
+        //ofPopMatrix();
 
 
         //advance record head

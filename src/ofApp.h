@@ -55,8 +55,8 @@ extern int MIDI_YPOS;
 extern int MIDI_SHADER_BYPASS;
 extern int MIDI_SHADER_THRESH;
 extern int MIDI_SHADER_SOFT;
-extern int MIDI_SHADER_INVERT_ON;
-extern int MIDI_SHADER_INVERT_OFF;
+extern int MIDI_CHANNEL_SELECT;
+extern int MIDI_SHADER_INVERT;
 extern int MIDI_SHADER_OPACITY;
 extern int MIDI_SHADER_CAM_OPACITY;
 extern int MIDI_SHADER_CAM_THRESH;
@@ -98,11 +98,11 @@ class ofApp : public ofBaseApp, public ofxMidiListener {
 
 		void setup();
 		void update();
-        void draw();
-        void drawCam(int x, int y);
-        void drawMIDI();
+    void draw();
+    void drawCam(int x, int y);
+    void drawMIDI();
 		void flipKnob();
-        void exit();
+    void exit();
 
 		void keyPressed(int key);
 		void keyReleased(int key);
@@ -116,38 +116,39 @@ class ofApp : public ofBaseApp, public ofxMidiListener {
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
 
-        ofTexture nowTexture;
-        ofPixels nowPixels;
+    ofTexture nowTexture;
+    ofPixels nowPixels;
 
-        int counter;
+    int counter;
+    float scale = 1;
 		bool knobMode;
 		ofImage     img;
     float thresh;
     float pThresh;
-    
-        // for MIDI
-        void newMidiMessage(ofxMidiMessage& eventArgs);
 
-        stringstream text;
+    // for MIDI
+    void newMidiMessage(ofxMidiMessage& eventArgs);
 
-        ofxMidiIn midiIn;
-        ofxMidiMessage midiMessage;
-    	ofxMidiOut midiOut;
+    stringstream text;
 
-        // for shader params
-        ofShader camShader;
-        ofImage camShaderMask;
-        ofTexture camShaderMaskTex;
+    ofxMidiIn midiIn;
+    ofxMidiMessage midiMessage;
+    ofxMidiOut midiOut;
 
-        float camShaderActive;
+    // for shader params
+    ofShader camShader;
+    ofImage camShaderMask;
+    ofTexture camShaderMaskTex;
+
+    float camShaderActive;
 
 
-        // Video layers
-        vector < vidLayer > vidLayers;
+    // Video layers
+    vector < vidLayer > vidLayers;
 
-        // Live Camera
+    // Live Camera
 
-        #ifdef TARGET_LINUX_ARM
+    #ifdef TARGET_LINUX_ARM
 
             /*
             void onCharacterReceived(KeyListenerEventData& e)

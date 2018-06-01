@@ -29,7 +29,7 @@ public:
     int myID;               //layer id
     int state;              //0 = stop | 1 = record | 2 = play
     int playHead;           //playhead location in frames
-	bool playDirection;
+	  bool playDirection;
     int recHead;            //record location in frames
     int recCount;           //record frame counter
     int recMax;             //maximum buffer size

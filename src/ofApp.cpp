@@ -43,8 +43,8 @@ int MIDI_YPOS;
 int MIDI_SHADER_BYPASS;
 int MIDI_SHADER_THRESH;
 int MIDI_SHADER_SOFT;
-int MIDI_SHADER_INVERT_ON;
-int MIDI_SHADER_INVERT_OFF;
+int MIDI_CHANNEL_SELECT;
+int MIDI_SHADER_INVERT;
 int MIDI_SHADER_OPACITY;
 int MIDI_SHADER_CAM_OPACITY;
 int MIDI_SHADER_CAM_THRESH;
@@ -120,15 +120,15 @@ void ofApp::setup(){
     MIDI_SHADER_BYPASS = XML.getValue("MIDI_SHADER_BYPASS", 0);
     MIDI_SHADER_THRESH = XML.getValue("MIDI_SHADER_THRESH", 0);
     MIDI_SHADER_SOFT = XML.getValue("MIDI_SHADER_SOFT", 0);
-    MIDI_SHADER_INVERT_ON = XML.getValue("MIDI_SHADER_INVERT_ON", 0);
-    MIDI_SHADER_INVERT_OFF = XML.getValue("MIDI_SHADER_INVERT_OFF", 0);
+    MIDI_CHANNEL_SELECT = XML.getValue("MIDI_CHANNEL_SELECT", 0);
+    MIDI_SHADER_INVERT = XML.getValue("MIDI_SHADER_INVERT", 0);
     MIDI_SHADER_OPACITY = XML.getValue("MIDI_SHADER_OPACITY", 0);
     MIDI_SHADER_CAM_OPACITY = XML.getValue("MIDI_SHADER_CAM_OPACITY", 0);
     MIDI_SHADER_CAM_THRESH = XML.getValue("MIDI_SHADER_CAM_THRESH", 0);
     MIDI_SHADER_CAM_SOFT = XML.getValue("MIDI_SHADER_CAM_SOFT", 0);
     MIDI_SHADER_CAM_INVERT_ON = XML.getValue("MIDI_SHADER_CAM_INVERT_ON", 0);
     MIDI_SHADER_CAM_INVERT_OFF = XML.getValue("MIDI_SHADER_CAM_INVERT_OFF", 0);
-	MIDI_KNOB_MODE = XML.getValue("MIDI_KNOB_MODE", 0);
+	  MIDI_KNOB_MODE = XML.getValue("MIDI_KNOB_MODE", 0);
 
     //default layer settings
     LAYER_SCALE = XML.getValue("LAYER_SCALE", 0.0);
@@ -192,8 +192,8 @@ void ofApp::setup(){
 		//videoGrabber2.setAWBMode("shade");
 
         videoGrabber2.setup(CAM_W,CAM_H,true);//setup camera (w,h,color = true,gray = false);
-		videoGrabber2.setRotation(270);//rotate cam to proper angle
-		videoGrabber2.setAWBMode((MMAL_PARAM_AWBMODE_T)4);//"shade" setting for awb-mode
+		    videoGrabber2.setRotation(270);//rotate cam to proper angle
+		    videoGrabber2.setAWBMode((MMAL_PARAM_AWBMODE_T)4);//"shade" setting for awb-mode
 
     } else {
          //consoleListener.setup(this);
@@ -203,9 +203,9 @@ void ofApp::setup(){
         omxCameraSettings.framerate = CAM_FPS;
         omxCameraSettings.enableTexture = true;
         omxCameraSettings.enablePixels = true;
-		videoGrabber.setRotation(ROTATION_180);
+		    videoGrabber.setRotation(ROTATION_180);
         videoGrabber.setup(omxCameraSettings);
-		videoGrabber.setWhiteBalance("Shade");
+		    videoGrabber.setWhiteBalance("Shade");
     }
 
 
@@ -310,8 +310,6 @@ void ofApp::update(){
         }
     #endif
 
-
-
     // update video layers
 
     for (int k=0;k<LAYER_COUNT;k++){
@@ -324,9 +322,6 @@ void ofApp::update(){
         vidLayers[k].update2(nowTexture);
 
         }
-
-
-
 }
 
 //--------------------------------------------------------------
@@ -351,8 +346,6 @@ void ofApp::draw(){
         //ofLog(OF_LOG_NOTICE, "---------drawing up WITHOUT Shader");
         drawCam(0,0);
     }
-
-
     //itereate through all recording buffers
     for (int k=0;k<LAYER_COUNT;k++){
         vidLayers[k].draw(nowTexture);
@@ -372,7 +365,8 @@ void ofApp::drawCam(int x, int y) {
                 //this works
                 //drawMat(frame,x,y);
                 //thisImage.draw(x+THUMB_W,y,THUMB_W,THUMB_H);
-                nowTexture.draw(0,0,CAM_W,CAM_H);
+                nowTexture.setAnchorPercent(0.5,0.5);
+                nowTexture.draw(WINDOW_W/2,WINDOW_H/2,CAM_W * scale,CAM_H * scale);
 
             } else {
                 //ofLog(OF_LOG_NOTICE, "---------drawing found empty frame");
@@ -545,28 +539,71 @@ void ofApp::newMidiMessage(ofxMidiMessage& msg) {
     }
 
     //invert messages
-    if (midiMessage.pitch >= MIDI_SHADER_INVERT_ON && midiMessage.pitch <= ((2 * LAYER_COUNT) + (MIDI_SHADER_INVERT_ON - 2)) && (midiMessage.pitch - MIDI_REC) % 2 == 1 ) {
-        int layNum = (midiMessage.pitch - MIDI_SHADER_INVERT_ON) / 2;
+    // if (midiMessage.pitch >= MIDI_SHADER_INVERT_ON && midiMessage.pitch <= ((2 * LAYER_COUNT) + (MIDI_SHADER_INVERT_ON - 2)) && (midiMessage.pitch - MIDI_REC) % 2 == 1 ) {
+    //     int layNum = (midiMessage.pitch - MIDI_SHADER_INVERT_ON) / 2;
+    //     if (midiMessage.velocity == 127) {
+    //         vidLayers[layNum].setInvert(!vidLayers[layNum].invert); // Should toggle
+    //         ofLog(OF_LOG_NOTICE, ofToString(layNum) + " Invert toggle");
+    //         if(vidLayers[layNum].invert == 1) midiOut.sendNoteOn(MIDI_PORT, midiMessage.pitch, 127);
+    //         else midiOut.sendNoteOff(MIDI_PORT, midiMessage.pitch);
+    //     }
+    // }
+
+    //Select
+    if (midiMessage.pitch >= MIDI_CHANNEL_SELECT && midiMessage.pitch <= ((2 * LAYER_COUNT) + (MIDI_CHANNEL_SELECT - 2)) && (midiMessage.pitch - MIDI_REC) % 2 == 1 ) {
+        int layNum = (midiMessage.pitch - MIDI_CHANNEL_SELECT) / 2;
         if (midiMessage.velocity == 127) {
-            vidLayers[layNum].setInvert(!vidLayers[layNum].invert); // Should toggle
+            vidLayers[layNum].setSelected(!vidLayers[layNum].getSelected()); // Should toggle
             ofLog(OF_LOG_NOTICE, ofToString(layNum) + " Invert toggle");
-            if(vidLayers[layNum].invert == 1) midiOut.sendNoteOn(MIDI_PORT, midiMessage.pitch, 127);
+            if(vidLayers[layNum].getSelected() == 1) midiOut.sendNoteOn(MIDI_PORT, midiMessage.pitch, 127);
             else midiOut.sendNoteOff(MIDI_PORT, midiMessage.pitch);
         }
     }
 
-    //opacity messages
-    if (midiMessage.control >= MIDI_SHADER_OPACITY && midiMessage.control <= ((2 * LAYER_COUNT) + (MIDI_SHADER_OPACITY - 2)) && (midiMessage.control - MIDI_SHADER_OPACITY) % 2 == 0 ) {
+    // if (midiMessage.control == MSG) {
+    //   for(int i = 0; i < LAYER_COUNT; i ++){
+    //     if(vidLayers[i].getSelected()){
+    //       //Do something
+    //     }
+    //   }
+    // }
 
-        int layNum = (midiMessage.control - MIDI_SHADER_OPACITY) / 2;
-        float scaleVal = 1.;
-        scaleVal = Utils::scale(midiMessage.value,0,127,0,1);
-        //ofLog(OF_LOG_NOTICE, "Setting opacity to " + ofToString(scaleVal) + " MIDI Control: " + ofToString(midiMessage.control) + " MIDI Pitch: " + ofToString(midiMessage.pitch) );
-        midiOut.sendNoteOn(MIDI_PORT, 40 + layNum, midiMessage.value);
-        vidLayers[layNum].setOpacity(scaleVal);
+    //Invert
+    if (midiMessage.pitch == MIDI_SHADER_INVERT) {
+      for(int i = 0; i < LAYER_COUNT; i ++){
+        if(vidLayers[i].getSelected()){
+          if (midiMessage.velocity == 127) {
+            vidLayers[i].setInvert(!vidLayers[i].invert); // Should toggle
+            ofLog(OF_LOG_NOTICE, ofToString(i) + " Invert toggle");
+          }
+        }
+      }
     }
 
-    //thresh messages
+    //Opacity messages
+    if (midiMessage.control >= MIDI_SHADER_OPACITY && midiMessage.control <= ((2 * LAYER_COUNT) + (MIDI_SHADER_OPACITY - 2)) && (midiMessage.control - MIDI_SHADER_OPACITY) % 2 == 0 ) {
+          //This extra if statement deals with how OF sends CC values of 0,0 additionally when sending pitch msgs
+          if(midiMessage.value > 0){
+            int layNum = (midiMessage.control - MIDI_SHADER_OPACITY) / 2;
+            float scaleVal = 1.;
+            scaleVal = Utils::scale(midiMessage.value,1,127,0,1);
+            //ofLog(OF_LOG_NOTICE, "Setting opacity to " + ofToString(scaleVal) + " MIDI Control: " + ofToString(midiMessage.control) + " MIDI Pitch: " + ofToString(midiMessage.pitch) );
+            midiOut.sendNoteOn(MIDI_PORT, 40 + layNum, midiMessage.value);
+            vidLayers[layNum].setOpacity(scaleVal);
+          }
+    }
+
+    //Flip knob mode
+      if (midiMessage.pitch == MIDI_KNOB_MODE) {
+          if (midiMessage.velocity == 127){
+            knobMode = !knobMode; //flip knobMode
+        //invert logic
+        if(knobMode == 1) midiOut.sendNoteOn(MIDI_PORT, midiMessage.pitch, 127);
+        else midiOut.sendNoteOff(MIDI_PORT, midiMessage.pitch);
+          }
+      }
+
+    //Thresh OR Scale messages
     if (midiMessage.control >=MIDI_SHADER_THRESH && midiMessage.control <= ((2 * LAYER_COUNT) + (MIDI_SHADER_THRESH - 2)) && (midiMessage.control - MIDI_SHADER_OPACITY) % 2 == 1) {
         int layNum = (midiMessage.control - MIDI_SHADER_THRESH) / 2;
         float scaleVal = 1.;
@@ -575,72 +612,82 @@ void ofApp::newMidiMessage(ofxMidiMessage& msg) {
 		//control thresh or soft based on knobMode
         if(knobMode == 1) vidLayers[layNum].setThresh(scaleVal);
 		    else {
-          if (midiMessage.value < 64) {
-            scaleVal = Utils::scale(midiMessage.value,0,64,0,1);} else { scaleVal = Utils::scale(midiMessage.value,64,127,1,5);}
+          if (midiMessage.value < 64){
+            scaleVal = Utils::scale(midiMessage.value,0,64,0,1);
+          } else {
+            scaleVal = Utils::scale(midiMessage.value,64,127,1,5);
+          }
             vidLayers[layNum].setScale(scaleVal);
         }
-
-        //vidLayers[layNum].softness = scaleVal;
     }
-
-	//flip knob mode
-    if (midiMessage.pitch == MIDI_KNOB_MODE) {
-       	if (midiMessage.velocity == 127){
-       		knobMode = !knobMode; //flip knobMode
-			//invert logic
-			if(knobMode == 1) midiOut.sendNoteOn(MIDI_PORT, midiMessage.pitch, 127);
-			else midiOut.sendNoteOff(MIDI_PORT, midiMessage.pitch);
-       	}
+    //Layer Soft
+    if (midiMessage.control == MIDI_SHADER_SOFT ) {
+        //camSoftness = Utils::scale(midiMessage.value,0,127,0., 1.);
+        for(int i = 0; i < LAYER_COUNT; i ++){
+          if(vidLayers[i].getSelected()) vidLayers[i].softness = Utils::scale(midiMessage.value,0,127,0.,1.);
+        }
     }
-
-    //scale messages
-    if (midiMessage.control >=MIDI_SCALE && midiMessage.control <=(MIDI_SCALE+LAYER_COUNT) ) {
-        int layNum = midiMessage.control - MIDI_SCALE;
-        float scaleVal = 1.;
-        if (midiMessage.value < 64) {  scaleVal = Utils::scale(midiMessage.value,0,64,0,1);} else { scaleVal = Utils::scale(midiMessage.value,64,127,1,5);}
-        //ofLog(OF_LOG_NOTICE, "Setting scale to " + ofToString(scaleVal));
-
-        vidLayers[layNum].setScale(scaleVal);
-    }
-
-
 
     //X position messages
-    if (midiMessage.control >=MIDI_XPOS && midiMessage.control <=(MIDI_XPOS+LAYER_COUNT) ) {
-        int layNum = midiMessage.control - MIDI_XPOS ;
-        float xPosition =Utils::scale(midiMessage.value,0,127,0,WINDOW_W);
-        vidLayers[layNum].setXPos(xPosition);
+    if (midiMessage.control == MIDI_XPOS) {
+      for(int i = 0; i < LAYER_COUNT; i ++){
+        if(vidLayers[i].getSelected()){
+
+          if(vidLayers[i].x > WINDOW_W + (WINDOW_W * vidLayers[i].scale * 0.5)){
+            vidLayers[i].x = (WINDOW_W + (WINDOW_W * vidLayers[i].scale * 0.5)) - 1;
+          }
+          else if(vidLayers[i].x < 0 - (WINDOW_W * vidLayers[i].scale * 0.5) ){
+            vidLayers[i].x = (0 - WINDOW_W * vidLayers[i].scale * 0.5) + 1;
+          }
+
+            float xPosition =Utils::scale(midiMessage.value,0,127,-8,8);
+            ofLog(OF_LOG_NOTICE, ofToString(i) + " xPos= " + ofToString(xPosition));
+            vidLayers[i].setXPos(ofLerp(vidLayers[i].x + xPosition, vidLayers[i].x, 0.5));
+        }
+      }
     }
 
     //Y position messages
-    if (midiMessage.control >=MIDI_YPOS && midiMessage.control <=(MIDI_YPOS+LAYER_COUNT) ) {
-        int layNum = midiMessage.control - MIDI_YPOS;
-        float yPosition = Utils::scale(midiMessage.value,0,127,WINDOW_H,0);
+    if (midiMessage.control == MIDI_YPOS) {
+      for(int i = 0; i < LAYER_COUNT; i ++){
+        if(vidLayers[i].getSelected()){
+          if(vidLayers[i].y > WINDOW_H + (WINDOW_H * vidLayers[i].scale * 0.5)){
+            vidLayers[i].y = (WINDOW_H + (WINDOW_H * vidLayers[i].scale * 0.5)) - 1;
+          }
+          else if(vidLayers[i].y < 0 - (WINDOW_H * vidLayers[i].scale * 0.5)){
+            vidLayers[i].y = 0 - (WINDOW_H * vidLayers[i].scale * 0.5) + 1;
+          }
 
-        vidLayers[layNum].setYPos(yPosition);
+            float yPosition = Utils::scale(midiMessage.value,127,0,-8,8);
+            vidLayers[i].setYPos(vidLayers[i].y + yPosition);
+        }
+      }
     }
+
     //Shader messages
-
-
     if (midiMessage.control ==MIDI_SHADER_BYPASS ) {
-        camShaderActive = Utils::scale(midiMessage.value,0,127,0., 1.);
+      camShaderActive = Utils::scale(midiMessage.value,0,127,0., 1.);
     }
 
     if (midiMessage.control ==MIDI_SHADER_CAM_OPACITY ) {
-        camOpacity = Utils::scale(midiMessage.value,0,127,0., 1.);
+      camOpacity = Utils::scale(midiMessage.value,0,127,0., 1.);
     }
 
-    if (midiMessage.control ==MIDI_SHADER_CAM_SOFT ) {
-        //camSoftness = Utils::scale(midiMessage.value,0,127,0., 1.);
-        for(int i = 0; i < LAYER_COUNT; i ++){
-          vidLayers[i].softness = Utils::scale(midiMessage.value,0,127,0.,1.);
-        }
+    if (midiMessage.control == MIDI_SHADER_CAM_SOFT ) {
+      camSoftness = Utils::scale(midiMessage.value,0,127,0., 1.);
     }
 
     if (midiMessage.control ==MIDI_SHADER_CAM_THRESH ) {
-
-        if(knobMode == 1) camThresh = Utils::scale(midiMessage.value,0,127,0., 1.);
-		else  camSoftness = Utils::scale(midiMessage.value,0,127,0., 1.);
+      if(knobMode == 1) camThresh = Utils::scale(midiMessage.value,0,127,0., 1.);
+      else{
+        float scaleVal;
+        if (midiMessage.value < 64){
+          scaleVal = Utils::scale(midiMessage.value,0,64,0,1);
+        } else {
+          scaleVal = Utils::scale(midiMessage.value,64,127,1,5);
+        }
+          scale = scaleVal;
+      }
     }
 
 		//     if (midiMessage.control == CAM_BRIGHTNESS ) {
