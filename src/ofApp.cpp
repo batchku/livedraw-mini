@@ -633,10 +633,10 @@ void ofApp::newMidiMessage(ofxMidiMessage& msg) {
       for(int i = 0; i < LAYER_COUNT; i ++){
         if(vidLayers[i].getSelected()){
 
-          if(vidLayers[i].x > WINDOW_W + (WINDOW_W * vidLayers[i].scale * 0.5)){
-            vidLayers[i].x = (WINDOW_W + (WINDOW_W * vidLayers[i].scale * 0.5)) - 1;
+          if(vidLayers[i].x > WINDOW_W + (WINDOW_W * vidLayers[i].scale)){
+            vidLayers[i].x = (WINDOW_W + (WINDOW_W * vidLayers[i].scale)) - 1;
           }
-          else if(vidLayers[i].x < 0 - (WINDOW_W * vidLayers[i].scale * 0.5) ){
+          else if(vidLayers[i].x < 0 - (WINDOW_W * vidLayers[i].scale) ){
             vidLayers[i].x = (0 - WINDOW_W * vidLayers[i].scale * 0.5) + 1;
           }
 
@@ -651,15 +651,35 @@ void ofApp::newMidiMessage(ofxMidiMessage& msg) {
     if (midiMessage.control == MIDI_YPOS) {
       for(int i = 0; i < LAYER_COUNT; i ++){
         if(vidLayers[i].getSelected()){
-          if(vidLayers[i].y > WINDOW_H + (WINDOW_H * vidLayers[i].scale * 0.5)){
-            vidLayers[i].y = (WINDOW_H + (WINDOW_H * vidLayers[i].scale * 0.5)) - 1;
+          if(vidLayers[i].y > WINDOW_H + (WINDOW_H * vidLayers[i].scale)){
+            vidLayers[i].y = (WINDOW_H + (WINDOW_H * vidLayers[i].scale)) - 1;
           }
-          else if(vidLayers[i].y < 0 - (WINDOW_H * vidLayers[i].scale * 0.5)){
+          else if(vidLayers[i].y < 0 - (WINDOW_H * vidLayers[i].scale)){
             vidLayers[i].y = 0 - (WINDOW_H * vidLayers[i].scale * 0.5) + 1;
           }
 
             float yPosition = Utils::scale(midiMessage.value,127,0,-8,8);
             vidLayers[i].setYPos(vidLayers[i].y + yPosition);
+        }
+      }
+    }
+
+    //Rotation
+    if (midiMessage.control == MIDI_XPOS + 1) {
+      for(int i = 0; i < LAYER_COUNT; i ++){
+        if(vidLayers[i].getSelected()){
+          float rot = Utils::scale(midiMessage.value, 0, 127, -10, 10);
+          vidLayers[i].setRotation(vidLayers[i].rotation + rot);
+        }
+      }
+    }
+
+    //Rotation
+    if (midiMessage.control == MIDI_YPOS + 1) {
+      for(int i = 0; i < LAYER_COUNT; i ++){
+        if(vidLayers[i].getSelected()){
+          float rot = Utils::scale(midiMessage.value, 0, 127, -10, 10);
+          vidLayers[i].setZ(vidLayers[i].z + rot);
         }
       }
     }

@@ -35,6 +35,8 @@ public:
     int recMax;             //maximum buffer size
     float opacity;
     bool selected;
+    float rotation;
+    float z;
 
 
     //methods
@@ -54,6 +56,8 @@ public:
     void setOpacity(float opacity);
     void setThresh(float thresh);
     void setInvert(float invert);
+    void setRotation(float rotation);
+    void setZ(float z);
 
     int setFrame(int thisFrame, ofPixels thisPixels);
 
@@ -70,8 +74,6 @@ public:
     float softness;
     float invert;
     void setShaderParams(float thresh, float softness, float invert);
-
-
 };
 
 #endif /* vidLayer_hpp */

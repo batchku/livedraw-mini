@@ -72,7 +72,19 @@ void vidLayer::draw(ofTexture thisTexture){
             shader.setUniform1f("softness", softness);
             shader.setUniform1f("invert", invert);
             shader.setUniform1f("opacity", opacity);
-            vidFrames2[playHead].draw(x, y , CAM_W * scale, CAM_H * scale);
+
+            //Translate the image based on Joystick x and y settings
+            ofPushMatrix();
+            ofTranslate(x, y);
+              //Push and Pop matrix to rotate without the rotation affecting the translation
+              ofPushMatrix();
+              //Rotate based on rotation setting
+              //ofRotateZ(z);
+              ofRotate(rotation);
+              vidFrames2[playHead].draw(0, 0 , CAM_W * scale, CAM_H * scale);
+              ofPopMatrix();
+            ofPopMatrix();
+
 
             shader.end();
         } else {
@@ -85,7 +97,7 @@ void vidLayer::draw(ofTexture thisTexture){
         //while recording, draw live feed
              ofTexture livefeed;
              livefeed = thisTexture;
-             //livefeed.setAnchorPercent(0.5, 0.5);
+             livefeed.setAnchorPercent(0.5, 0.5);
          if (shaderActive == 1) {
              shader.begin();
              shader.setUniformTexture("maskTex", imageMask.getTexture(), 1);
@@ -96,11 +108,11 @@ void vidLayer::draw(ofTexture thisTexture){
              livefeed.draw(x, y, CAM_W * scale, CAM_H * scale);
              shader.end();
          } else {
-            ofPushMatrix();
-            ofRotate(45);
-            livefeed.setAnchorPoint(((CAM_W * scale) - x) * 0.5, ((CAM_H * scale) - y) * 0.5 );
+            //ofPushMatrix();
+            //ofRotate(45);
+            //livefeed.setAnchorPoint(((CAM_W * scale) - x) * 0.5, ((CAM_H * scale) - y) * 0.5 );
             livefeed.draw(x, y , CAM_W * scale, CAM_H * scale);
-            ofPopMatrix();
+            //ofPopMatrix();
          }
 
 
@@ -132,15 +144,11 @@ void vidLayer::update2(ofTexture theTexture){
     if (state == 1) {
         //ofLog(OF_LOG_NOTICE, "recording update2 " + ofToString(myID)+ " at "+ ofToString(recHead));
 
-        //Rotate?
-        //ofPushMatrix();
-        //theTexture.setAnchorPoint(x, y);
-        //ofRotate(45);
         //draw texture onto FBO
         vidFrames2[recHead].begin();
         theTexture.draw(0,0);
         vidFrames2[recHead].end();
-        //ofPopMatrix();
+
 
 
         //advance record head
@@ -243,23 +251,24 @@ void vidLayer::setInvert(float thisInvert){
 }
 
 void vidLayer::setPos(int positionX, int positionY){
-
     x = positionX ;
     y = positionY;
     //ofLog(OF_LOG_NOTICE, "---setting position of " + ofToString(myID) + " to  " + ofToString(x) + " " + ofToString(y));
-
 }
 
 void vidLayer::setXPos(int positionX){
     x = positionX ;
     //ofLog(OF_LOG_NOTICE, "---setting X position of " + ofToString(myID) + " to  " + ofToString(x));
-
-
 }
 
 void vidLayer::setYPos(int positionY){
-
     y = positionY;
     //ofLog(OF_LOG_NOTICE, "---setting X position of " + ofToString(myID) + " to  " + ofToString(y));
+}
 
+void vidLayer::setRotation(float thisRotation){
+  rotation = thisRotation;
+}
+void vidLayer::setZ(float thisZ){
+  z = thisZ;
 }
